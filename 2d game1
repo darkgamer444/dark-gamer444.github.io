@@ -1,0 +1,69 @@
+const canvas = document.getElementById("gameCanvas");
+const context = canvas.getContext("2d");
+
+canvas.width = 400;
+canvas.height = 600;
+
+// Car and road details
+const road = {
+  x: 0,
+  y: 0,
+  width: canvas.width,
+  height: canvas.height
+};
+
+const car = {
+  width: 50,
+  height: 100,
+  x: canvas.width / 2 - 25,
+  y: canvas.height - 120,
+  color: "red",
+  speed: 5
+};
+
+let keys = {};
+
+// Listen for key presses
+window.addEventListener("keydown", (event) => {
+  keys[event.key] = true;
+});
+
+window.addEventListener("keyup", (event) => {
+  keys[event.key] = false;
+});
+
+// Draw the road
+function drawRoad() {
+  context.fillStyle = "gray";
+  context.fillRect(road.x, road.y, road.width, road.height);
+}
+
+// Draw the car
+function drawCar() {
+  context.fillStyle = car.color;
+  context.fillRect(car.x, car.y, car.width, car.height);
+}
+
+// Move the car
+function moveCar() {
+  if (keys["ArrowLeft"] && car.x > 0) {
+    car.x -= car.speed;
+  }
+  if (keys["ArrowRight"] && car.x < canvas.width - car.width) {
+    car.x += car.speed;
+  }
+}
+
+// Game loop
+function gameLoop() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  drawRoad();
+  drawCar();
+  moveCar();
+
+  requestAnimationFrame(gameLoop);
+}
+
+// Start the game
+gameLoop();
